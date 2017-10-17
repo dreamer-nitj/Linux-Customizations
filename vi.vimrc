@@ -40,7 +40,7 @@ Bundle 'Pydiction'
 Bundle 'fatih/vim-go'
 Bundle 'AndrewRadev/splitjoin.vim'
 " vim will automatically :set paste for you when in insert mode
-Bundle 'ConradIrwin/vim-bracketed-paste'
+" Bundle 'ConradIrwin/vim-bracketed-paste'
 " This plug-in provides automatic closing of quotes, parenthesis, brackets,
 " etc., besides some other related features that should make your time in
 " insert mode a little bit easier, like syntax awareness (will not insert the
@@ -65,8 +65,8 @@ call vundle#end()
 " Snipmate and Pydiction both uses Tab key to complete. It can be
 " fixed like this:
 " Remap snipmate's trigger key from tab to <C-J>
-imap <C-J> <Plug>snipMateNextOrTrigger
-smap <C-J> <Plug>snipMateNextOrTrigger
+inoremap <C-J> <Plug>snipMateNextOrTrigger
+snoremap <C-J> <Plug>snipMateNextOrTrigger
 
 " Attempt to determine the type of a file based on its name and possibly its
 " contents. Use this to allow intelligent auto-indenting for each filetype,
@@ -75,41 +75,24 @@ smap <C-J> <Plug>snipMateNextOrTrigger
 filetype indent plugin on
 " python specefic settings
 let g:pydiction_location='~/.vim/bundle/Pydiction/complete-dict'
-au FileType py set autoindent
-au FileType py set smartindent
+
 " au FileType py set tabstop=3
 " au FileType py set shiftwidth=3
 " au FileType py set softtabstop=3
 "
-" Set the tabstop and indent for go files
-au FileType go set tabstop=4
-au FileType go set shiftwidth=4
-au FileType go set expandtab
-
 " the listchars will turn tabs into large tringles, and
 " trailing spaces and blank lines with spaces into small
 " bullets
-"set list listchars=tab:▷⋅,trail:⋅,nbsp:⋅
+set list listchars=tab:▷⋅,trail:⋅,nbsp:⋅
 
 " statusline will tell you the filename, type of file that
 " Vim thinks it is, what sort of line endings are used,
 " as well as your vertical position in the file.
-set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}]\
-    \ [%l/%L\ (%p%%)
+" set statusline=%F%m%r%h%w\ [TYPE=%Y\ %{&ff}] [%l/%L\ (%p%%)
 
 "
 " Enable syntax highlighting
 syntax on
-
-" highlight searches
-set hlsearch
-
-" set incremental search to true
-set incsearch
-
-" Use case insensitive search, except when using capital letters
-set ignorecase
-set smartcase
 
 " Allow backspacing over autoindent, line breaks and start of insert action
 set backspace=indent,eol,start
@@ -146,13 +129,6 @@ set visualbell
 
 " My venture with vim scripting
 "
-" define a mapping so that i can press Ctrl-u in insert-mode
-" to convert the current word to uppercase. By default, Ctrl-u is 
-" mapped to delete all the entered characters in current line
-" which is rarely used.
-inoremap <c-u> <esc>viwUea
-nnoremap <c-u> viwU
-
 "
 """"""""""""""""""""""
 "      Settings      "
@@ -166,8 +142,6 @@ set ttyscroll=3                 " Speedup scrolling
 set laststatus=2                " Show status line always
 set encoding=utf-8              " Set default encoding to UTF-8
 set autoread                    " Automatically read changed files
-set autoindent                  " Enabile Autoindent
-set backspace=indent,eol,start  " Makes backspace key more powerful.
 set incsearch                   " Shows the match while typing
 set hlsearch                    " Highlight found searches
 set noerrorbells                " No beeps
@@ -195,9 +169,6 @@ command! -nargs=* -complete=help Help vertical belowright help <args>
 autocmd FileType help wincmd L
 
 " Go specific settings vim-go
-autocmd FileType go map <C-n> :cnext<CR>
-autocmd FileType go map <C-m> :cprevious<CR>
-autocmd FileType go nnoremap <leader>a :cclose<CR>
 let g:go_fmt_command = "goimports"
 
 " shortcuts to build and run go programs with <leader>b and <leader>r
@@ -434,43 +405,86 @@ endfunction
 
 " define a autocmd group for go based files
 augroup go
-  autocmd!
+   autocmd!
+   autocmd FileType go set expandtab shiftwidth=4 tabstop=4
 
-  " Show by default 4 spaces for a tab
-  autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+   " Show by default 4 spaces for a tab
+   autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
 
-  " :GoBuild and :GoTestCompile
-  autocmd FileType go nmap <Leader>b  <Plug>(go-build)
+   " :GoBuild and :GoTestCompile
+   autocmd FileType go nmap <Leader>b  <Plug>(go-build)
 
-  " :GoTest
-  autocmd FileType go nmap <Leader>t  <Plug>(go-test)
+   " :GoTest
+   autocmd FileType go nmap <Leader>t  <Plug>(go-test)
 
-  " :GoRun
-  autocmd FileType go nmap <Leader>r  <Plug>(go-run)
+   " :GoRun
+   autocmd FileType go nmap <Leader>r  <Plug>(go-run)
 
-  " :GoDoc
-  autocmd FileType go nmap <Leader>d <Plug>(go-doc)
+   " :GoDoc
+   autocmd FileType go nmap <Leader>d <Plug>(go-doc)
 
-  " :GoCoverageToggle
-  autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+   " :GoCoverageToggle
+   autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
 
-  " :GoInfo
-  autocmd FileType go nmap <Leader>i <Plug>(go-info)
+   " :GoInfo
+   autocmd FileType go nmap <Leader>i <Plug>(go-info)
 
-  " :GoMetaLinter
-  autocmd FileType go nmap <Leader>l <Plug>(go-metalinter)
+   " :GoMetaLinter
+   autocmd FileType go nmap <Leader>l <Plug>(go-metalinter)
 
-  " :GoDef but opens in a vertical split
-  autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
-  " :GoDef but opens in a horizontal split
-  autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
+   " :GoDef but opens in a vertical split
+   autocmd FileType go nmap <Leader>v <Plug>(go-def-vertical)
+   " :GoDef but opens in a horizontal split
+   autocmd FileType go nmap <Leader>s <Plug>(go-def-split)
 
-  " :GoAlternate  commands :A, :AV, :AS and :AT
-  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-  autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+   " :GoAlternate  commands :A, :AV, :AS and :AT
+   autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+   autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+   autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+   autocmd Filetype go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+
+   " comment out line support using <localleader>c pressing
+   autocmd FileType go nnoremap <buffer> <localleader>c I// <esc>
+   autocmd FileType go map <C-n> :cnext<CR>
+   autocmd FileType go map <C-m> :cprevious<CR>
+   autocmd FileType go nnoremap <leader>a :cclose<CR>
+
 augroup END
+
+augroup python
+   autocmd!
+
+   autocmd FileType py set autoindent
+   autocmd FileType py set smartindent
+
+augroup END
+
+" define a autocmd group for Markdown based files
+augroup md
+   autocmd!
+
+   " operator non-recursive mapping for selecting the text inside headings for
+   " Markdown
+   autocmd BufNewFile,BufRead *.md onoremap <buffer> ih :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rkvg_"<cr>
+
+   " operator non-recursive mapping for selecting the text around headings for
+   " Markdown
+   autocmd BufNewFile,BufRead *.md onoremap <buffer> ah :<c-u>execute "normal! ?^==\\+$\r:nohlsearch\rg_vk0"<cr>
+
+   " for 'inside next email address' mapping
+   autocmd BufNewFile,BufRead *.md onoremap <buffer> in@ :<c-u>execute "normal! f@lvf<space>h"<cr>
+
+   " for 'inside last email address' mapping
+   autocmd BufNewFile,BufRead *.md onoremap <buffer> il@ :<c-u>execute "normal! F@lvf<space>h"<cr>
+augroup END
+
+" define a autocmd group for vim files ---------------------- {{{
+augroup filetype_vim
+   autocmd!
+
+   autocmd FileType vim setlocal foldmethod=marker
+augroup END
+" }}}
 
 " this highlights the go build tags like +build linux, darwin etc
 let g:go_highlight_build_constraints = 1
@@ -511,6 +525,19 @@ noremap <Leader>f :NERDTreeFind<cr>
 nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
 " make it easier to source the $MYVIMRC file
 " nnoremap <Leader>sv :source $MYVIMRC<cr>
+" define a mapping so that i can press Ctrl-u in insert-mode
+" to convert the current word to uppercase. By default, Ctrl-u is 
+" mapped to delete all the entered characters in current line
+" which is rarely used.
+inoremap <c-u> <esc>viwUea
+nnoremap <c-u> viwU
+vnoremap <Leader>" <esc>`>a"<esc>`<i"<esc>
+" lets make it easier to switch to normal mode
+" also remove the old mapping to go to normal mode 
+" by pressing <esc> character
+inoremap jk <esc>
+inoremap <esc> <nop>
+
 
 let NERDTreeShowHidden=1
 
