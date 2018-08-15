@@ -18,7 +18,7 @@ Plugin 'tomtom/tlib_vim'
 " Plugin 'garbas/vim-snipmate'
 
 " Track the engine.
-Plugin 'SirVer/ultisnips'
+" Plugin 'SirVer/ultisnips'
 
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
@@ -83,7 +83,7 @@ let g:pydiction_location='~/.vim/bundle/Pydiction/complete-dict'
 " the listchars will turn tabs into large tringles, and
 " trailing spaces and blank lines with spaces into small
 " bullets
-set list listchars=tab:▷⋅,trail:⋅,nbsp:⋅
+" set list listchars=tab:▷⋅,trail:⋅,nbsp:⋅
 
 " statusline will tell you the filename, type of file that
 " Vim thinks it is, what sort of line endings are used,
@@ -145,7 +145,7 @@ set autoread                    " Automatically read changed files
 set incsearch                   " Shows the match while typing
 set hlsearch                    " Highlight found searches
 set noerrorbells                " No beeps
-set number                      " Show line numbers
+" set number                      " Show line numbers
 set showcmd                     " Show me what I'm typing
 set noswapfile                  " Don't use swapfile
 set nobackup                    " Don't create annoying backup files
@@ -509,11 +509,11 @@ let g:ctrlp_match_window = 'bottom,order:btt,max:10,results:10'
 let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
 
 " ==================== delimitMate ====================
-let g:delimitMate_expand_cr = 1   
-let g:delimitMate_expand_space = 1    
-let g:delimitMate_smart_quotes = 1    
-let g:delimitMate_expand_inside_quotes = 0    
-let g:delimitMate_smart_matchpairs = '^\%(\w\|\$\)'   
+let g:delimitMate_expand_cr = 1
+let g:delimitMate_expand_space = 1
+let g:delimitMate_smart_quotes = 1
+let g:delimitMate_expand_inside_quotes = 0
+let g:delimitMate_smart_matchpairs = '^\%(\w\|\$\)'
 
 imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
 
@@ -526,14 +526,14 @@ nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
 " make it easier to source the $MYVIMRC file
 " nnoremap <Leader>sv :source $MYVIMRC<cr>
 " define a mapping so that i can press Ctrl-u in insert-mode
-" to convert the current word to uppercase. By default, Ctrl-u is 
+" to convert the current word to uppercase. By default, Ctrl-u is
 " mapped to delete all the entered characters in current line
 " which is rarely used.
 inoremap <c-u> <esc>viwUea
 nnoremap <c-u> viwU
 vnoremap <Leader>" <esc>`>a"<esc>`<i"<esc>
 " lets make it easier to switch to normal mode
-" also remove the old mapping to go to normal mode 
+" also remove the old mapping to go to normal mode
 " by pressing <esc> character
 inoremap jk <esc>
 inoremap <esc> <nop>
@@ -580,3 +580,15 @@ au InsertEnter * exec "inoremap <silent> " . g:UltiSnipsJumpBackwardTrigger . " 
 
 " Trigger a highlight in the appropriate direction when pressing these keys:
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+" Try to fix the vim's paste mode which inserts [200~ characters
+let &t_SI .= "\<Esc>[?2004h"
+let &t_EI .= "\<Esc>[?2004l"
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+function! XTermPasteBegin()
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
+endfunction

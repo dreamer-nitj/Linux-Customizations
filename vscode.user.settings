@@ -1,0 +1,29 @@
+// Place your settings in this file to overwrite the default settings
+{
+    "editor.fontSize": 18,
+    "extensions.ignoreRecommendations": true,
+    "window.zoomLevel": -1,
+    "workbench.colorTheme": "Visual Studio Light",
+    "editor.fontFamily": "monaco",
+    // "workbench.editor.enablePreviewFromQuickOpen": false,
+    "workbench.editor.enablePreview": false,
+
+    // go related settings
+    "go.autocompleteUnimportedPackages": true,
+    "files.autoSave": "afterDelay", // for go tools to work correctly
+    "go.useCodeSnippetsOnFunctionSuggest": true,
+    "go.formatTool": "goreturns",
+
+    // The number of spaces a tab is equal to. This setting is overriden
+    // based on the file contents when `editor.detectIndentation` is true.
+    "editor.tabSize": 4,
+
+    // Insert spaces when pressing Tab. This setting is overriden
+    // based on the file contents when `editor.detectIndentation` is true.
+    "editor.insertSpaces": true,
+
+    // When opening a file, `editor.tabSize` and `editor.insertSpaces`
+    // will be detected based on the file contents. Set to false to keep
+    // the values you've explicitly set, above.
+    "editor.detectIndentation": false
+}
