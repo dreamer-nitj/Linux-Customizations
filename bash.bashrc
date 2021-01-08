@@ -302,3 +302,80 @@ httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grab
 
 #   remove_disk: spin down unneeded disk
 #   ---------------------------------------
+export CLOUDSDK_PYTHON=python3
+# macOS Catalina
+export PYENV_ROOT="$HOME/.pyenv/versions/3.6.7"
+export PATH="$PYENV_ROOT/bin:$PATH"
+alias mosh="LC_ALL="en_US.UTF-8" mosh"
+alias gco="git checkout --recurse-submodules"
+alias gpl="git pull --recurse-submodules"
+alias activate_spark="source /Users/ankit.kumar/go/src/spark/polaris/.buildenv/bin/activate"
+# set editing mode to vi
+set editing-mode vi
+# set the key binding to 'jk' to enter vi mode from command line
+bind '"jk": vi-movement-mode'
+get-taskchain-logs() {
+        sp-kubectl logs -f $(sp-kubectl get pods | grep `sp-korg-get-taskchain --taskchain-uuid $1 | jq -r .taskchain.workflowName` | cut -d ' ' -f 1) main
+}
+
+# spark command shortcuts
+#alias spl="source $sparkenv"
+alias sp='cd ~/go/src/spark/polaris'
+alias spe='spark env'
+alias spb='sp-service-build'
+
+# arcanist shortcuts
+alias af='arc feature'
+alias ad='arc diff'
+alias ade='arc diff --edit'
+alias adc='arc diff --create'
+alias al='arc land'
+                                                                                                                                                                                               # git shortcuts
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gl='git log'
+alias gd='git diff'
+alias gdh='git diff HEAD~1'
+alias gco='git checkout'
+alias gre='git pull --rebase'
+alias gb='git br'
+alias gca='git commit --amend'
+alias resetsoft='git reset --soft HEAD~1'
+alias resethard='git reset --hard HEAD~1'
+# login to the dev vm
+alias dv='mosh ubuntu@10.0.156.4'
+
+# running log tail for a component
+get-pod-id() {
+        sp-kubectl -d $1 get pods -l app=$2 | cut -f 1 -d \  | tail -1
+}
+
+get-logs() {
+        sp-kubectl -d $1 logs -f $(get-pod-id $2)
+}
+
+# Parse the taskchain config returned by sp-korg-get-taskchain
+# Usage: sp-korg-get-taskchain -d dev-056 --taskchain-uuid 01a93f11-8772-4ef9-a6f6-697b521948ce | jq-taskchain-config
+#alias jq-taskchain-config="jq  .taskchain.config | sed 's/\\\\//g' | tail -c +2 | head -c -2 | jq"
+jq-taskchain-config="jq -r .taskchain.config | sed 's/\\\\//g' | jq"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+
+# ui related shortcuts
+alias spu='sp; cd src/rubrik/spark-ui';
+alias spa='sp; cd src/rubrik/api-server';
+alias ardiff='arc diff --nolint --nounit --excuse jenkins'
+alias asail='arc sail'
+alias mypy='mypy --follow-imports silent'
+alias t='spu; make test';
+alias ws='spu; webstorm &';
+alias tracking_branch='git rev-parse --abbrev-ref --symbolic-full-name @{u}'
+#alias rebase='TRACKING_BRANCH=$(tracking_branch); git checkout $TRACKING_BRANCH; git fetch origin; git reset --hard origin/$TRACKING_BRANCH; git checkout @{-1}; git rebase $TRACKING_BRANCH --autostash'
+alias trackmaster='git branch --set-upstream-to origin/master'
+alias setupstream='git branch --set-upstream-to'
+alias build='sp; spark build docker';
+alias provision='sp; spark minikube provision';
+alias proxy='sp; sp-port-forward'; #port forwarding to minikube
