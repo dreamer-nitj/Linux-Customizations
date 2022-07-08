@@ -21,7 +21,10 @@ Plugin 'tomtom/tlib_vim'
 " Plugin 'SirVer/ultisnips'
 
 " Snippets are separated from the engine. Add this if you want them:
-Plugin 'honza/vim-snippets'
+" Plugin 'honza/vim-snippets'
+
+Plugin 'w0rp/ale'
+Plugin 'majutsushi/tagbar'
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -34,7 +37,7 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " The following examples of different formats supported.
 " keep Plugin commands between vundle#begin/end/
 " plugin on github repo
-Bundle 'Pydiction'
+" Bundle 'Pydiction'
 
 " Add go lang support
 Bundle 'fatih/vim-go'
@@ -164,12 +167,47 @@ set nocursorcolumn              " Do not highlight column (speeds up highlightin
 set nocursorline                " Do not highlight cursor (speeds up highlighting)
 set lazyredraw                  " Wait to redraw
 
+" tag bar toggle
+nmap <F8> :TagbarToggle<CR>
+
 " open help vertically
 command! -nargs=* -complete=help Help vertical belowright help <args>
 autocmd FileType help wincmd L
 
+" Bash specific settings
+autocmd FileType sh set makeprg=bash\ -n\ '%'
+autocmd FileType sh let &efm = "%E%f:\ line\ %l:\ %m," . &efm
+
+"# ALE
+"-----
+ 
+" Only lint on save or when switching back to normal mode
+let g:ale_enabled = 1
+let g:ale_lint_on_text_changed = 'disabled'
+let g:ale_lint_on_enter = 1
+let g:ale_fix_on_save = 0
+let g:ale_lint_on_filetype_changed = 1
+ 
+" Linter configuration
+let g:ale_linters = {
+\  'go': [ 'gometalinter' ],
+\  'python': [ 'flake8', 'mypy', 'pylint' ],
+\}
+ 
+let g:ale_go_gometalinter_options = '--fast --disable=gotype -E lll --cyclo-over=15'
+let g:ale_python_mypy_options = '--ignore-missing-imports'
+ 
+" Fixer configuration
+let g:ale_fixers = {
+\  'go': [ 'gofmt' ],
+\  'python': [ 'yapf', 'autopep8', 'isort' ],
+\}
+
 " Go specific settings vim-go
 let g:go_fmt_command = "goimports"
+" Disable gofmt and asmfmt on save.
+let g:go_fmt_autosave = 0
+let g:go_asmfmt_autosave = 0
 
 " shortcuts to build and run go programs with <leader>b and <leader>r
 " First remap the default <Leader> key which is backslash
@@ -592,3 +630,15 @@ function! XTermPasteBegin()
   set paste
   return ""
 endfunction
+
+set rtp+=/Users/ankit.kumar/.local/lib/python3.6/site-packages/powerline/bindings/vim
+
+if has("gui_running")
+   let s:uname = system("uname")
+   if s:uname == "Darwin\n"
+      set guifont=Meslo\ LG\ S\ for\ Powerline
+   endif
+endif
+
+" disable ultisnips
+set runtimepath-=~/.vim/bundle/vim-snippets
